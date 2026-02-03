@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: publish-deployment
+  labels:
+    app: publish
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: publish
+  template:
+    metadata:
+      labels:
+        app: publish
+    spec:
+      containers:
+      - name: publish
+        image: clunney/activemq-nodejs_publish-service:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: ACTIVE_MQ_USERNAME
+          value: admin
+        - name: ACTIVE_MQ_PASSWORD
+          value: admin
+        - name: ACTIVE_MQ_TOPIC
+          value: test
+        - name: ACTIVE_MQ_ENDPOINT
+          value: activemq-service://activemq-service
+        resources:
+          limits:
+            memory: 1024Mi
+            cpu: "1"
+          requests:
+            memory: 256Mi
+            cpu: "0.5"
